@@ -1,57 +1,69 @@
 ---
 format: typst
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 # Lab 4 Worksheet - Practice
 
-* add something about loading a csv and having to use
-# Split the one column into four
-energy_raw <- separate(
-  energy_raw,
-  col = 1,
-  into = c("State", "2021", "2022", "2023"),
-  sep = ","
-)
-* make sure str extract is clear str_extract(.x, "\\d+\\.?\\d*")
+-   add something about loading a csv and having to use \# Split the one
+    column into four energy_raw \<- separate( energy_raw, col = 1, into
+    = c("State", "2021", "2022", "2023"), sep = "," )
+-   make sure str extract is clear str_extract(.x, "\\d+\\.?\\d\*")
 
 #### Q1. Extract and clean text patterns from strings using regular expressions.
 
-You are given a messy dataset of energy sources with inconsistent units and spacing.
+You are given a messy dataset of energy sources with inconsistent units
+and spacing.
 
 ```{r}
 energy_sources <- c("Solar (MWh)", "Wind (GWh)", "Coal (MWh)", "Hydro (kWh)")
 ```
 
-a.  Use str_detect() to identify all energy sources that contain the substring "Wind" or "Hydro" (hint: use the \| operator in regex).
+a.  Use str_detect() to identify all energy sources that contain the
+    substring "Wind" or "Hydro" (hint: use the \| operator in regex).
 
 ```{r}
-
+energy_sources[str_detect(energy_sources, pattern = "Wind|Hydro")]
 ```
 
-b.  Extract the unit type (e.g., MWh, GWh, kWh) using str_extract(). Make sure your pattern handles extra spaces or hyphens.
+b.  Extract the unit type (e.g., MWh, GWh, kWh) using str_extract().
+    Make sure your pattern handles extra spaces or hyphens.
 
 ```{r}
-
+unit <- energy_sources |> str_extract("(MWh|GWh|kWh)")
 ```
 
-c.  Clean the names to keep only the energy source name, trimming whitespace and removing parentheses.
+c.  Clean the names to keep only the energy source name, trimming
+    whitespace and removing parentheses.
 
 ```{r}
-
+source <- energy_sources |> 
+str_remove("\\s*\\(.*\\)") |> 
+str_trim()
 ```
 
-d.  Create a clean tibble called energy_clean with two columns: source and unit.
+d.  Create a clean tibble called energy_clean with two columns: source
+    and unit.
 
 ```{r}
-
+df <- tibble(source = source, unit = unit)
 ```
 
-e.  Discussion: Why might regex cleaning be important before performing joins or aggregations?\
+e.  Discussion: Why might regex cleaning be important before performing
+    joins or aggregations?
+
     \
+    Clear out any blank space, parentheses that might be stored in the
+    data frame and sort them in columns so it's easier to access later\
 
 #### Q2. State Datasets: Joins and Pivots
 
-We’ll use built-in datasets to explore US state-level data. state.x77 contains metrics such as population, income, and life expectancy. state.region classifies each state into one of four regions: Northeast, South, North Central, West.
+We’ll use built-in datasets to explore US state-level data. state.x77
+contains metrics such as population, income, and life expectancy.
+state.region classifies each state into one of four regions: Northeast,
+South, North Central, West.
 
 ```{r}
 # Load datasets
@@ -76,25 +88,27 @@ states
 a.  Perform a left join to combine socioeconomic and regional data.
 
 ```{r}
-
+left_join(states, regions)
 ```
 
-b.  Perform an inner join. How many rows remain, and why is it the same or different?
+b.  Perform an inner join. How many rows remain, and why is it the same
+    or different?
+
+```{r}
+inner_join()
+```
+
+c.  Perform an anti join to check if any state names don’t match between
+    datasets. What might cause mismatches like this in real projects?
 
 ```{r}
 
 ```
 
-
-c.  Perform an anti join to check if any state names don’t match between datasets. What might cause mismatches like this in real projects?
-
-```{r}
-
-```
-
-d.  Discussion: Why would you prefer a left join over an inner join when merging state-level datasets?\
+d.  Discussion: Why would you prefer a left join over an inner join when
+    merging state-level datasets?\
     \
-e. Use pivot_longer() to make the socioeconomic data longer.\
+e.  Use pivot_longer() to make the socioeconomic data longer.\
 
 ```{r}
 
@@ -118,19 +132,20 @@ sales <- tibble(
 sales
 ```
 
-a. Convert the dataset from wide (one column per month) to long (one row per month per store).
+a.  Convert the dataset from wide (one column per month) to long (one
+    row per month per store).
 
 ```{r}
 
 ```
 
-b. Clean month names by removing _Sales.
+b.  Clean month names by removing \_Sales.
 
 ```{r}
 
 ```
 
-c. Convert the long dataset back to wide, with one column per month.
+c.  Convert the long dataset back to wide, with one column per month.
 
 ```{r}
 
@@ -170,7 +185,9 @@ ggplot(us_map_joined, aes(long, lat, group = group, fill = Income)) +
   labs(title = "Average Income by State")
 ```
 
-b.  Swap Income for Life Exp to visualize life expectancy instead. Try changing the color scale using scale_fill_gradient() or scale_fill_gradient2()
+b.  Swap Income for Life Exp to visualize life expectancy instead. Try
+    changing the color scale using scale_fill_gradient() or
+    scale_fill_gradient2()
 
 ```{r}
 

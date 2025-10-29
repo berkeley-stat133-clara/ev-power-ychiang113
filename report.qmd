@@ -8,12 +8,13 @@ format: typst
 ## **Part 0: libraries**
 
 ```{r}
-
+library(ggplot2)
+library(dplyr)
 ```
 
 ## **Part 1:** **Defining Research Question**
 
-Chosen Question:
+Chosen Question: Idk I haven't have time to do this project :(
 
 ## **Part 2: Data Preparation and Cleaning**
 
